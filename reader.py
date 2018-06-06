@@ -1,9 +1,10 @@
 import pandas as pd
+import datetime
 
 path = "data/database/"
 ending = "_DB.txt"
 
-listOfFiles = ["FAM"] # , "FAM", "FAT"
+listOfFiles = ["FAI"] # , "FAM", "FAT"
 
 for f in listOfFiles:
     print("start with file " + f)
@@ -52,7 +53,7 @@ for f in listOfFiles:
             currentLine += 1
 
             if (currentLine % 100000 == 0):
-                print("percent completed: " + str(round(currentLine / totalNoOfLines, 3)))
+                print(str(datetime.datetime.now()) + " - percent completed: " + str(round(currentLine / totalNoOfLines, 3) * 100))
 
         writer = pd.ExcelWriter("data/database/excel/" + f + '_DB.xlsx')
         csv_file.to_excel(writer, 'Sheet1')
