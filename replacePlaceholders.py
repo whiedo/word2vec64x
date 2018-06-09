@@ -1,4 +1,7 @@
+# -*- coding: utf-8 -*-
 import unicodedata
+import re
+import binascii
 
 print("create protyp array")
 
@@ -76,16 +79,31 @@ input = input.replace("~u", "")
 input = input.replace("~w", "")
 
 for i in range(len(prototypeArray)):
-    s = '\\u' + prototypeArray[i][1]
-    #s.encode('utf-8')
-    print(u"{name}".format(name=s).encode('utf-8'))
-    input = input.replace('\\u' + prototypeArray[i][0].replace('\n',''),s)
+    ##[i][1] = unicode
+    # #[i][0] = placeholder
+    s = prototypeArray[i][1]
+    s = s.replace('\n','')
+    placeholder = '\\' + prototypeArray[i][0].replace('\n', '')
+    placeholder = u'' + placeholder
 
-outputFile = open(path + newFilename,'w')
+    print(s)
+    print(placeholder)
+
+    cp2chr = lambda c: (b'\\u' + c.encode('ascii')).decode('raw_unicode_escape')
+    #cp2chr = lambda c: binascii.unhexlify(c.zfill(len(c) + (len(c) & 1))).decode('utf-8')
+    newS = cp2chr(s)
+
+    print(newS)
+
+    #if (s == '2265') or (s == '03BC') or (s == '03B3') or (s == '03B1') or (s == '03B2') or (s == '2264') or \
+     #       (s == '2033') or (s == '2032'):
+      #  newS = ''
+
+    input = input.replace(placeholder,newS)
+
+outputFile = open(path + newFilename,'w', encoding='utf-8')
 outputFile.write(input)
+#with open(path  + newFilename, 'w', encoding='utf-8') as f: f.write(input)
 outputFile.close()
 
 print("finished placeholders.")
-
-print(b'\002C'.decode("utf-8", "replace"))
-
